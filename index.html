@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Price Catalog</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-4xl font-bold text-center text-gray-800">
+                Digital Price Catalog
+            </h1>
+            <p class="text-center text-gray-500 mt-2">Prices update in real-time</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+        <!-- Brand Navigation Buttons -->
+        <nav id="brand-nav" class="bg-white p-4 shadow-md mb-8 rounded-lg">
+            <div id="brand-nav-buttons" class="flex flex-wrap justify-center gap-2">
+                <!-- Brand buttons will be dynamically injected here by JavaScript -->
+            </div>
+        </nav>
+
+        <!-- Product Display Section -->
+        <div>
+            <h2 id="brand-title" class="text-3xl font-bold text-gray-800 mb-6 pb-2 border-b-2 border-blue-500">
+                <!-- Brand title will be injected here -->
+            </h2>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Product cards will be dynamically injected here by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="text-center py-4 mt-8 bg-white shadow-inner">
+        <p class="text-gray-500 text-sm">&copy; 2025 Çomoğlu Gıda Price Catalog. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // --- Data from CSV files ---
+        const catalogData = {
+          "MASSİMO MAESTRO": [
+            { "id": "8050705431120", "productCode": "100003", "name": "MASSIMO CIAMBELLA DONUT ÇİLEK 6LI MULTI 270 GR*12", "price": 101.06, "imageUrl": "https://www.elvan.com.tr/ciambella-strawberry-donut-cilekli-45-gr-6-adet-1-kutu-unlu-urunler-maestro-massimo-5347-22-B.jpg" },
+            { "id": "8050705430208", "productCode": "100001", "name": "MASSIMO CIAMBELLA DONUT ÇİLEKLİ 45 GR*24*6", "price": 16.34, "imageUrl": "https://www.elvan.com.tr/ciambella-strawberry-donut-cilekli-45-gr-6-adet-1-kutu-unlu-urunler-maestro-massimo-5347-22-B.jpg" },
+            { "id": "8050705431106", "productCode": "100002", "name": "MASSIMO CIAMBELLA DONUT KAKAO 6LI MULTI 270 GR*12", "price": 101.06, "imageUrl": "https://productimages.hepsiburada.net/s/777/375-375/110000932737972.jpg" },
+            { "id": "8050705430185", "productCode": "100000", "name": "MASSIMO CIAMBELLA DONUT KAKAOLU 45 GR*24*6", "price": 16.34, "imageUrl": "https://static.ticimax.cloud/cdn-cgi/image/width=-,quality=85/48857/uploads/urunresimleri/buyuk/1150722-143-80.jpg" },
+            { "id": "8050705434459", "productCode": "100007", "name": "MASSIMO CORNETTO KRUVASAN ÇİKO 6LI MULTI 270", "price": 101.06, "imageUrl": "https://www.elvan.com.tr/cornetto-red-fruits-kruvasan-kirmizi-meyveli-45-gr-6-adet-1-kutu-unlu-urunler-maestro-massimo-5340-22-B.jpg"},
+            { "id": "8050705432202", "productCode": "100012", "name": "MASSIMO NUVOLA SNOW HİNDİSTAN 6LI MEGA 270 GR*12", "price": 101.06 },
+            { "id": "8050705430147", "productCode": "100011", "name": "MASSIMO NUVOLA SNOW KAHVE 45 GR*24*6", "price": 16.34 }
+          ],
+          "BEŞLER": [
+            { "id": "8681594302361", "productCode": "102 5364", "name": "Bİ LOKMA MACAR SALAM (55 GR) (12 ADET)", "price": 27.73, "imageUrl": "https://images.unsplash.com/photo-1585325701165-351af926739a?w=600&q=80" },
+            { "id": "8681594302378", "productCode": "202 5820", "name": "Bİ LOKMA HİNDİ SALAM (55 GR) (18 ADET)", "price": 18.57, "imageUrl": "https://images.unsplash.com/photo-1618585237380-ab334f89a234?w=600&q=80" },
+            { "id": "8681594302408", "productCode": "104 5520", "name": "Bİ LOKMA DANA JAMBON (50 GR) (12 ADET)", "price": 31.12, "imageUrl": "https://images.unsplash.com/photo-1551028150-60f9212e1b9?w=600&q=80" },
+            { "id": "8681594302392", "productCode": "205 5501", "name": "Bİ LOKMA HİNDİ FÜME (55 GR) (12 ADET)", "price": 25.25, "imageUrl": "https://images.unsplash.com/photo-1599921495255-d586b5141203?w=600&q=80" },
+            { "id": "DEĞİŞKEN-1013001", "productCode": "101 3001", "name": "GOLD SUCUK MAP AMBALAJ", "price": 663.1, "imageUrl": "https://images.unsplash.com/photo-1600115328290-c4a85871f115?w=600&q=80" },
+            { "id": "8690182056319", "productCode": "102 5329", "name": "ETLİ SALAM (1250 GR)(6ADET)", "price": 675.25, "imageUrl": "https://images.unsplash.com/photo-1591187515281-9b79415dda81?w=600&q=80" },
+            { "id": "8690182056326", "productCode": "102 5330", "name": "FISTIKLI SALAM (1250 GR)(6ADET)", "price": 657.16, "imageUrl": "https://images.unsplash.com/photo-1624552184280-9e9631bbe891?w=600&q=80" },
+            { "id": "8681594304549", "productCode": "202 5319", "name": "PİKNİK MACAR(500gr) (12 ADET)", "price": 106.27, "imageUrl": "https://images.unsplash.com/photo-1529952707326-fed07d8f49b6?w=600&q=80" },
+            { "id": "8690182033174", "productCode": "202 5317", "name": "PİKNİK MACAR(850gr) (8 ADET)", "price": 180.55, "imageUrl": "https://images.unsplash.com/photo-1529952707326-fed07d8f49b6?w=600&q=80" },
+            { "id": "8690182033181", "productCode": "202 5318", "name": "PİKNİK MİNİ MACAR(250gr) (20 ADET)", "price": 55.72, "imageUrl": "https://images.unsplash.com/photo-1585325701165-351af926739a?w=600&q=80" }
+          ],
+          "EDAY": [
+            { "id": "0-100152", "productCode": "100152", "name": "EDAY BLOK KAVURMA", "price": 1000 },
+            { "id": "0-100153", "productCode": "100153", "name": "EDAY TENEKE KAVURMA", "price": 1075 },
+            { "id": "0-100150", "productCode": "100150", "name": "EDAY ANATRİKOT PASTIRMA", "price": 1395 },
+            { "id": "0-100151", "productCode": "100151", "name": "EDAY KONTRAFİLE SIRT PASTIRMA", "price": 1300 }
+          ],
+          "BENORGANİC": [
+            { "id": "8680313580028", "productCode": "100348", "name": "BENORGANIC NAR SUYU 250 ml", "price": 46 },
+            { "id": "8680313580011", "productCode": "100349", "name": "BENORGANIC ELMA SUYU 250 ml", "price": 46 },
+            { "id": "8680313580035", "productCode": "100347", "name": "BENORGANIC PORTAKAL SUYU 250 ml", "price": 46 },
+            { "id": "8680313580066", "productCode": "100345", "name": "KIRMIZI MEYVELER KARIŞIK 250 ml", "price": 46 },
+            { "id": "8680313580516", "productCode": "28680313588288", "name": "BENORGANIC ŞEFTALİ KAYISI ELMA SUYU 250 ml", "price": 46 },
+            { "id": "8680313580509", "productCode": "28680313588806", "name": "BENORGANIC ÜZÜM SUYU 250 ml", "price": 46 }
+          ],
+          "UĞURLU": [
+            { "id": "8698605653992", "productCode": "100367", "name": "180 Gr. Acuka", "price": 27.5 },
+            { "id": "8698605653039", "productCode": "100360", "name": "225 Gr Çemen", "price": 27.5 },
+            { "id": "9344505854524", "productCode": "100361", "name": "5 Kg Acuka Dökme", "price": 605 },
+            { "id": "8698605654371", "productCode": "100362", "name": "5 Kg Zeytin Salatası", "price": 800 }
+          ],
+           "ÜNALPEYNİR": [
+            { "id": "0-100503", "productCode": "100503", "name": "ÜNAL ÇEÇİL PEYNİRİ KG", "price": 331.25 },
+            { "id": "8691659454409", "productCode": "100473", "name": "ÜNAL ÇEÇİL PEYNİRİ 200 GR*12", "price": 92 },
+            { "id": "8691659408013", "productCode": "100474", "name": "ÜNAL ESKİ KAŞAR ANADOLU 250 GR*8", "price": 115 }
+          ],
+          "ŞİFALIKÖY": [
+            { "id": "0-100178", "productCode": "100178", "name": "ŞİFALIKÖY DOLMALIK.PATLICAN AYDIN 70 GR*24", "price": 105 },
+            { "id": "0-100179", "productCode": "100179", "name": "ŞİFALIKÖY GURME DOLMALIK BİBER TATLI*24", "price": 117 }
+          ],
+          "HOSANLI": [
+            { "id": "8681338000737", "productCode": "100023", "name": "HOSANLI YAPRAK 1000 GR*6", "price": 263 },
+            { "id": "8681338000706", "productCode": "100022", "name": "HOSANLI YAPRAK 2000 GR*4", "price": 503 }
+          ],
+          "AŞPA": [
+            { "id": "8697427874486-100064", "productCode": "100064", "name": "GELİNCİK 5 KG ANTEP F.KREMASI", "price": 3350 },
+            { "id": "8697427874486-100434", "productCode": "100434", "name": "GELİNCİK 5 KG ANTEP F.KREMASI PARÇACIKLI", "price": 3480 }
+          ],
+          "ORDU TRM": [
+            { "id": "8684441629017", "productCode": "100529", "name": "ORDU TARIM FINDIK EZMESİ CAM ŞEKERLİ 300 GR*14", "price": 148 },
+            { "id": "0-100530", "productCode": "100530", "name": "ORDU TARIM FINDIK EZMESİ CAM ŞEKERSİZ 300 GR*14", "price": 193 }
+          ],
+          "HAŞİROĞLU": [
+            { "id": "8697464690155", "productCode": "100601", "name": "HAŞİROĞLU BOL YOĞURTLU YEŞİL CİPS TARHANA 450GR*20", "price": 150 },
+            { "id": "8697464690919", "productCode": "100606", "name": "HAŞİROĞLU KIRMIZI ACI BAHARATLI TARHANA 225 GR*12", "price": 110.21 }
+          ],
+          "LOKMAN": [
+            { "id": "100056", "productCode": "100056", "name": "LOKMAN AYVA RECELI 700 GR*12", "price": 63.5 },
+            { "id": "100053", "productCode": "100053", "name": "LOKMAN AYVA RECELİ 360 GR*12", "price": 34.9 }
+          ],
+          "TADA": [
+            { "id": "100561", "productCode": "100561", "name": "TADA 7 TOHUMLU MISIR VE PİRİNÇ PATLAĞI 60 GR*6", "price": 31.06 },
+            { "id": "100582", "productCode": "100582", "name": "TADA ACILI SÜRÜLEBİLİR TON BALIĞI/TUNA 175 GR*12", "price": 111.01 }
+          ],
+          "TAT": [
+            { "id": "8690635060948", "productCode": "101000", "name": "BEZELYE GARNITUR 550 G CAM TAT", "price": 52 },
+            { "id": "8690635060733", "productCode": "101001", "name": "BEZELYE GARNITUR 340 G CAM TAT", "price": 37.5 }
+          ],
+          "AYCA": [
+            { "id": "100075", "productCode": "100075", "name": "AYCA KAHVALTILIK TOST PEYNİRİ 2000*6", "price": 550 },
+            { "id": "100076", "productCode": "100076", "name": "1000 GR AYCA DİLİMLİ TOST PEYNİR", "price": 240 }
+          ],
+          "İmra Salça": [
+            { "id": "100210", "productCode": "100210", "name": "DOMATES SALÇASI 19 KG KOVA", "price": 1000 },
+            { "id": "100211", "productCode": "100211", "name": "İMRA TATLI BİBER SALÇASI 19 KG KOVA", "price": 1535 }
+          ],
+          "SUATERSOY": [
+            { "id": "100173", "productCode": "100173", "name": "ERSOY KAHVALTILIK BEYAZ PEYNIR 17 KĞ", "price": 1385 },
+            { "id": "100174", "productCode": "100174", "name": "ERSOY GAZİBEY TOST PEYNİRİ 1 KG", "price": 165 }
+          ],
+          "YENİCE": [
+            { "id": "100476", "productCode": "100476", "name": "YENİCE KASAP SUCUK KG", "price": 450 },
+            { "id": "10209", "productCode": "10209", "name": "YENİCE DANA BLOK KAVURMA KG", "price": 975 }
+          ],
+          "ÇİRİŞLİ": [
+            { "id": "100027", "productCode": "100027", "name": "ÇİRİŞLİ DANA BLOK KAVURMA KG", "price": 850 },
+            { "id": "100436", "productCode": "100436", "name": "ÇİRİŞLİ DANA KAVURMA TENEKE KG", "price": 850 }
+          ],
+          "TEK LEZZET": [
+            { "id": "8681695431755", "productCode": "100520", "name": "TEK LEZET BAKLAVALIK&BÖREKLİK YUFKA 500 GR*20", "price": 47 },
+            { "id": "8681695431700", "productCode": "100521", "name": "TEK LEZET SİGARA BÖREKLİK ÜÇGEN YUFKA 360 GR*24", "price": 44 }
+          ],
+          "TAHSİLDAROĞLU": [
+            { "id": "100313", "productCode": "100313", "name": "TAH. KLASIK BEYAZ PEYNİR 18 KG", "price": 5650 },
+            { "id": "100314", "productCode": "100314", "name": "TAH. KLASİK İNEK BEYAZ PEYNİRİ/SHİLINKLI) 10 KG", "price": 325 }
+          ],
+          "GESAŞ": [
+            { "id": "100197", "productCode": "100197", "name": "GESAŞ HELVA FLUPACK KAKAOLU 3 KG*2", "price": 375 },
+            { "id": "100198", "productCode": "100198", "name": "GESAŞ HELVA FLUPACK VANİLYALI 3 KG*2", "price": 375 }
+          ],
+          "ERİŞ UN": [
+            { "id": "100154", "productCode": "100154", "name": "ERİŞ ÇOK AMAÇLI BUĞDAY UNU 1 KGX10", "price": 21.95 },
+            { "id": "100155", "productCode": "100155", "name": "ERİŞ ÇOK AMAÇLI BUĞDAY UNU 2 KGX8", "price": 42.5 }
+          ],
+          "SOSERO": [
+            { "id": "8680395186965", "productCode": "40073", "name": "SOSERO ACI BIBER SOSU 370CC KVNZ", "price": 68.5 },
+            { "id": "8680395186996", "productCode": "40070", "name": "SOSERO ACI SOS 2KG VAK.TBK", "price": 335.5 }
+          ],
+          "YÖRE YEŞİL": [
+            { "id": "8680395181908", "productCode": "20082", "name": "YORE DOMAT BIBERLI DOMAT INCISI (120-140)10KG TNK", "price": 2490 },
+            { "id": "8680395181915", "productCode": "20081", "name": "YORE DOMAT BIBERLI GOLD (141-160) 10KG TNK", "price": 2260 }
+          ],
+          "YÖRE SİYAH": [
+            { "id": "8680395184619", "productCode": "10017", "name": "YORE GEMLIK SLM SAH (201-230) 10KG TNK", "price": 3800 },
+            { "id": "8680395184138", "productCode": "10055", "name": "YORE GEMLIK YS SAH (201-230) 10KG TNK", "price": 3850 }
+          ],
+          "YÖRE TURŞU": [
+            { "id": "8680395183988", "productCode": "30056", "name": "YORE TURSU BIBERIYE BIBER 370CC KVNZ", "price": 42 },
+            { "id": "8680395183995", "productCode": "30053", "name": "YORE TURSU BIBERIYE BIBER 720CC KVNZ", "price": 71 }
+          ],
+          "ECEM": [
+            { "id": "8684501061498", "productCode": "100132", "name": "ECEM ALIÇ MARMELATI 10 KG", "price": 59.95 },
+            { "id": "8684501061511", "productCode": "100125", "name": "ECEM KAKAOLU FINDIK KREMASI 10 KG", "price": 79.95 }
+          ],
+          "JUNGLE": [
+            { "id": "8681299600212", "productCode": "100650", "name": "Jungle Muhabbet Kuşu Yemi 300 gr", "price": 43.20 },
+            { "id": "8681299606290", "productCode": "100651", "name": "Jungle Gurme Muhabbet 400 gr Kraker Hediyeli", "price": 63.35 }
+          ],
+          "SMİLE": [
+            { "id": "8682631206369", "productCode": "100800", "name": "Smile Muhabbet Kuşu Yemi 400 g", "price": 43 },
+            { "id": "8682631206376", "productCode": "100801", "name": "Smile 3 lü Ballı Muhabbet Krakeri", "price": 26.75 }
+          ]
+        };
+
+        // --- DOM Elements ---
+        const brandNavContainer = document.getElementById('brand-nav-buttons');
+        const brandTitle = document.getElementById('brand-title');
+        const productGrid = document.getElementById('product-grid');
+        let priceUpdateIntervals = [];
+
+        /**
+         * Clears all active price update intervals. This is called before rendering a new brand's products.
+         */
+        function clearPriceIntervals() {
+            priceUpdateIntervals.forEach(clearInterval);
+            priceUpdateIntervals = [];
+        }
+
+        /**
+         * Finds all product cards in the DOM and starts a price update interval for each one.
+         */
+        function startPriceUpdates() {
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                const priceElement = card.querySelector('.price-value');
+                const priceIconElement = card.querySelector('.price-icon');
+                if (!priceElement || !priceIconElement) return;
+
+                const originalPrice = parseFloat(priceElement.dataset.originalPrice);
+                let currentPrice = originalPrice;
+
+                const intervalId = setInterval(() => {
+                    const change = (Math.random() - 0.5) * 2; // Random value between -1 and 1
+                    const newPrice = Math.max(0.01, originalPrice + (originalPrice * (change / 10)));
+                    const priceChange = newPrice - currentPrice;
+
+                    // Update UI elements
+                    priceElement.textContent = `${newPrice.toFixed(2)} TL`;
+
+                    const priceColor = priceChange > 0 ? 'text-green-500' : priceChange < 0 ? 'text-red-500' : 'text-gray-500';
+                    const priceIcon = priceChange > 0 ? '▲' : priceChange < 0 ? '▼' : '';
+
+                    priceElement.className = `price-value text-2xl font-bold ${priceColor}`;
+                    priceIconElement.className = `price-icon text-sm font-semibold ${priceColor}`;
+                    priceIconElement.textContent = priceIcon;
+
+                    currentPrice = newPrice;
+                }, 2000 + Math.random() * 1000); // Update every 2-3 seconds
+
+                priceUpdateIntervals.push(intervalId);
+            });
+        }
+
+        /**
+         * Renders the product grid for a given brand.
+         * @param {string} brand - The name of the brand to display.
+         */
+        function displayProducts(brand) {
+            brandTitle.textContent = brand;
+            
+            // Clear previous state
+            productGrid.innerHTML = '';
+            clearPriceIntervals();
+
+            // Update nav button styles
+            document.querySelectorAll('#brand-nav-buttons button').forEach(button => {
+                button.className = `px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+                    button.textContent === brand
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`;
+            });
+
+            // Generate and display new product cards
+            const products = catalogData[brand] || [];
+            let gridHTML = '';
+            products.forEach(product => {
+                const imageUrl = product.imageUrl || `https://placehold.co/600x400/EEE/31343C?text=${product.name.split(' ')[0]}`;
+                gridHTML += `
+                    <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <img 
+                            src="${imageUrl}" 
+                            alt="${product.name}" 
+                            class="w-full h-48 object-cover"
+                            onError="this.onerror=null;this.src='https://placehold.co/600x400/CCCCCC/FFFFFF?text=Image+Not+Found';"
+                        />
+                        <div class="p-4 flex flex-col justify-between h-48">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 h-16">${product.name}</h3>
+                                <p class="text-sm text-gray-500 mb-2">SKU: ${product.productCode}</p>
+                            </div>
+                            <div class="flex items-center justify-between mt-4">
+                                <p class="price-value text-2xl font-bold text-gray-500" data-original-price="${product.price}">
+                                    ${product.price.toFixed(2)} TL
+                                </p>
+                                <span class="price-icon text-sm font-semibold text-gray-500"></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            productGrid.innerHTML = gridHTML;
+            
+            // Start price updates for the newly rendered cards
+            startPriceUpdates();
+        }
+
+        /**
+         * Initializes the application. Renders the brand navigation and the products for the first brand.
+         */
+        function initializeApp() {
+            const brands = Object.keys(catalogData);
+            
+            // Create brand navigation buttons
+            brands.forEach(brand => {
+                const button = document.createElement('button');
+                button.textContent = brand;
+                button.onclick = () => displayProducts(brand);
+                brandNavContainer.appendChild(button);
+            });
+            
+            // Display the first brand by default
+            if (brands.length > 0) {
+                displayProducts(brands[0]);
+            }
+        }
+
+        // Start the application once the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+</body>
+</html>
